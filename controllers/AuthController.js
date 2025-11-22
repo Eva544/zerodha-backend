@@ -30,7 +30,7 @@ const Signup = async (req, res) => {
     // ✅ Store token as cookie (makes user “logged in”)
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // use true if HTTPS
+      secure: true, // use true if HTTPS
       sameSite: "Lax",
     });
 
@@ -79,7 +79,7 @@ const Login = async (req, res) => {
     // 5️⃣ Store token in cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // true in production with HTTPS
+      secure: true, // true in production with HTTPS
       sameSite: "Lax",
     });
 

@@ -18,6 +18,8 @@ const uri = process.env.MONGO_URL;
 const app = express();
 
 const allowedOrigins = [
+  "http://localhost:3000", // landing local
+  "http://localhost:3001", // dashboard local
   "https://zerodha-frontend-cn66.onrender.com",
   "https://zerodha-dashboard-b447.onrender.com"
 ];
