@@ -17,7 +17,12 @@ const uri = process.env.MONGO_URL;
 
 const app = express();
 
-app.use(cors({origin: "*",
+const allowedOrigins = [
+  "https://zerodha-frontend-cn66.onrender.com",
+  "https://zerodha-dashboard-b447.onrender.com"
+];
+
+app.use(cors({origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
