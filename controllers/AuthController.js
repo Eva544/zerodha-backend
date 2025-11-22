@@ -31,7 +31,7 @@ const Signup = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true, // use true if HTTPS
-      sameSite: "Lax",
+      sameSite: "None",
     });
 
     console.log("Signup successful, sending response...");
@@ -80,7 +80,7 @@ const Login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true, // true in production with HTTPS
-      sameSite: "Lax",
+      sameSite: "None",
     });
 
     // 6️⃣ Send response
