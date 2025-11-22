@@ -24,7 +24,13 @@ const allowedOrigins = [
   "https://zerodha-dashboard-b447.onrender.com"
 ];
 
-app.use(cors({origin: allowedOrigins,
+app.use(cors({function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS not allowed"));
+    }
+  },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
