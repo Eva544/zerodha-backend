@@ -8,12 +8,16 @@ const Signup = async (req, res) => {
     console.log("Incoming signup:", req.body);
 
     if (!email || !password || !username) {
-      return res.status(400).json({ success: false, message: "All fields are required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields are required" });
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ success: false, message: "User already exists" });
+      return res
+        .status(409)
+        .json({ success: false, message: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -48,7 +52,9 @@ const Signup = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: "Signup failed", error: error.message });
+    return res
+      .status(500)
+      .json({ success: false, message: "Signup failed", error: error.message });
   }
 };
 
@@ -58,19 +64,25 @@ const Login = async (req, res) => {
 
     // 1️⃣ Check if email and password are provided
     if (!email || !password) {
-      return res.status(400).json({ success: false, message: "All fields are required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields are required" });
     }
 
     // 2️⃣ Find the user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ success: false, message: "User does not exist" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User does not exist" });
     }
 
     // 3️⃣ Compare the password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ success: false, message: "Incorrect password" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Incorrect password" });
     }
 
     // 4️⃣ Create JWT token
@@ -81,6 +93,7 @@ const Login = async (req, res) => {
       httpOnly: true,
       secure: true, // true in production with HTTPS
       sameSite: "None",
+      path: "/",
     });
 
     // 6️⃣ Send response
@@ -93,13 +106,13 @@ const Login = async (req, res) => {
         email: user.email,
       },
     });
-
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: "Login failed", error: error.message });
+    return res
+      .status(500)
+      .json({ success: false, message: "Login failed", error: error.message });
   }
 };
-
 
 const getUser = async (req, res) => {
   try {
@@ -110,7 +123,9 @@ const getUser = async (req, res) => {
     res.status(200).json({ success: true, user });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Failed to get user", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to get user", error: error.message });
   }
 };
 
