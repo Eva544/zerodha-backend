@@ -5,20 +5,20 @@ module.exports.verifyToken = (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-      return res.json({ status: false, message: "No token found" });
+      return res.status(401).json({ success: false, message: "No token found" });
     }
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
-        return res.json({ status: false, message: "Invalid token" });
-      } else {
-        req.userId = decoded.id;
-        next();
+        return res.status(401).json({ success: false, message: "Invalid token" });
       }
+
+      req.userId = decoded.id;
+      next();
     });
 
   } catch (error) {
     console.error(error);
-    res.json({ status: false, message: "Authorization failed" });
+    res.status(500).json({ success: false, message: "Authorization failed" });
   }
 };

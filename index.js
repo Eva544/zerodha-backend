@@ -17,14 +17,24 @@ const uri = process.env.MONGO_URL;
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "https://zerodha-frontend-cn66.onrender.com",
+  "https://zerodha-dashboard-b447.onrender.com"
+];
+
 const corsOptions = {
-  origin: [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "https://zerodha-frontend-cn66.onrender.com",
-    "https://zerodha-dashboard-b447.onrender.com"
-  ],
-  methods: "GET,POST,PUT,DELETE",
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps, curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
 };
 
@@ -224,13 +234,15 @@ app.post("/newOrder", async (req, res) => {
   res.send("Order placed");
 });
 
-mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+mongoose.connect(uri)
   .then(() => console.log("MongoDB is  connected successfully"))
   .catch((err) => console.error(err));
 
-app.listen(PORT, () => {
-  console.log("Backend server is running on http://localhost:3002");
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Backend server is running on port ${PORT}`);
 });
+
