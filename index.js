@@ -17,23 +17,20 @@ const uri = process.env.MONGO_URL;
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:3000", // landing local
-  "http://localhost:3001", // dashboard local
-  "https://zerodha-frontend-cn66.onrender.com",
-  "https://zerodha-dashboard-b447.onrender.com"
-];
+const corsOptions = {
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://zerodha-frontend-cn66.onrender.com",
+    "https://zerodha-dashboard-b447.onrender.com"
+  ],
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true,
+};
 
-app.use(cors({function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS not allowed"));
-    }
-  },
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-}));
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // important for preflight
+
 
 app.use(bodyParser.json());
 app.use(cookieParser());
