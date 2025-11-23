@@ -17,8 +17,6 @@ const uri = process.env.MONGO_URL;
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
-
 app.use(
   cors({
     origin: [
